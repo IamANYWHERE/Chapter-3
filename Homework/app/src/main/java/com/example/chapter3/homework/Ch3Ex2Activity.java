@@ -2,6 +2,7 @@ package com.example.chapter3.homework;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -125,24 +126,42 @@ public class Ch3Ex2Activity extends AppCompatActivity {
         if (animatorSet != null) {
             animatorSet.cancel();
         }
-
+        int duration = Integer.parseInt(durationSelector.getText().toString());
         // 在这里实现了一个 ObjectAnimator，对 target 控件的背景色进行修改
         // 可以思考下，这里为什么要使用 ofArgb，而不是 ofInt 呢？
+        // 因为颜色的渐变在数字会有突变，所以不能单纯的对数值递增
         ObjectAnimator animator1 = ObjectAnimator.ofArgb(target,
                 "backgroundColor",
                 getBackgroundColor(startColorPicker),
                 getBackgroundColor(endColorPicker));
-        animator1.setDuration(Integer.parseInt(durationSelector.getText().toString()));
+        animator1.setDuration(duration);
         animator1.setRepeatCount(ObjectAnimator.INFINITE);
         animator1.setRepeatMode(ObjectAnimator.REVERSE);
 
         // TODO ex2-1：在这里实现另一个 ObjectAnimator，对 target 控件的大小进行缩放，从 1 到 2 循环
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(target,
+                "scaleX",
+                1f, 2f);
+        animator2.setDuration(duration);
+        animator2.setRepeatCount(ObjectAnimator.INFINITE);
+        animator2.setRepeatMode(ObjectAnimator.REVERSE);
 
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(target,
+                "scaleY",
+                1f, 2f);
+        animator3.setDuration(duration);
+        animator3.setRepeatCount(ObjectAnimator.INFINITE);
+        animator3.setRepeatMode(ObjectAnimator.REVERSE);
         // TODO ex2-2：在这里实现另一个 ObjectAnimator，对 target 控件的透明度进行修改，从 1 到 0.5f 循环
-
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(target,
+                "alpha",
+                1f, 0.5f);
+        animator4.setDuration(duration);
+        animator4.setRepeatCount(ValueAnimator.INFINITE);
+        animator4.setRepeatMode(ValueAnimator.REVERSE);
         // TODO ex2-3: 将上面创建的其他 ObjectAnimator 都添加到 AnimatorSet 中
         animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animator1);
+        animatorSet.play(animator1).with(animator2).with(animator3).with(animator4);
         animatorSet.start();
     }
 }
